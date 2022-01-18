@@ -21,3 +21,4 @@ data class MemeModel(
     var url: String? = "",
     var name: String? = ""
 )
+

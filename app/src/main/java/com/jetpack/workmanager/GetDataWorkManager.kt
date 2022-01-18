@@ -15,8 +15,8 @@ class GetDataWorkManager(
 
 
     override suspend fun doWork(): Result {
-        val result = APIRequestHandler.instance?.api?.callGetMemeList()
-        if (result?.success == true) {
+        val result = APIRequestHandler.instance?.api.callGetMemeList()
+        if (result?.success) {
             val memeList = result?.data?.memes ?: ArrayList()
             for (meme in memeList) {
                 if (!TextUtils.isEmpty(meme.url)) {

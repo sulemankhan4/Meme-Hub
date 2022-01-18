@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.jetpack.adapter.MemeAdapter
 import com.jetpack.entity.MemeModel
+import com.jetpack.utils.ImageUtils
 import kotlinx.android.synthetic.main.activity_meme_list.*
 
 class MemeListActivity : AppCompatActivity() {
@@ -24,7 +25,6 @@ class MemeListActivity : AppCompatActivity() {
             this,
             MemeListViewModelFactory(memeDatabase)
         )[MemeListViewModel::class.java]
-        memeViewModel.callGetAllMemes()
         setUpObserver()
         setUpAdapter()
 
@@ -36,7 +36,14 @@ class MemeListActivity : AppCompatActivity() {
     }
 
     private fun setUpObserver() {
-        memeViewModel.memeList.observe(this, Observer { list ->
+        memeViewModel.memesFromMemeGen.observe(this, Observer { memeGenList ->
+            memeGenList?.let{
+                for(meme in it){
+                    ImageUtils.preloadImage(this,meme.url?:"")
+                }
+            }
+        })
+        memeViewModel.mediatorLiveData.observe(this, Observer { list ->
             list?.let {
                 memeAdapter.updateList(ArrayList(it))
             }
